@@ -2,7 +2,6 @@ package com.example.quiztournament.model;
 
 import jakarta.persistence.*;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity

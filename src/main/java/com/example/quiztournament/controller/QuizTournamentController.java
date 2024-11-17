@@ -1,6 +1,7 @@
 package com.example.quiztournament.controller;
 
 import com.example.quiztournament.model.QuizTournament;
+import com.example.quiztournament.model.TriviaQuestion;
 import com.example.quiztournament.service.QuizTournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,22 @@ public class QuizTournamentController {
     public ResponseEntity<QuizTournament> getTournamentById(@PathVariable Long id) {
         QuizTournament tournament = tournamentService.getTournamentById(id);
         return ResponseEntity.ok(tournament);
+    }
+
+    // Fetch trivia questions for a specific tournament
+    @GetMapping("/{id}/questions")
+    public ResponseEntity<List<TriviaQuestion>> getTriviaQuestions(
+            @PathVariable Long id,
+            @RequestParam int numberOfQuestions,
+            @RequestParam String category,
+            @RequestParam String difficulty) {
+        QuizTournament tournament = tournamentService.getTournamentById(id);
+        if (tournament != null) {
+                List<TriviaQuestion> questions = tournamentService.fetchTriviaQuestions(numberOfQuestions, category, difficulty);
+            return ResponseEntity.ok(questions);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Update a quiz tournament
