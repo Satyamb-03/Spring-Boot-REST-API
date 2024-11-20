@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "quiz_tournaments")
@@ -27,7 +28,7 @@ public class QuizTournament {
     private int numberOfQuestions;
 
     @OneToMany(mappedBy = "quizTournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TriviaQuestion> triviaQuestions;
+    private Set<TriviaQuestion> triviaQuestions;
     // Getters and Setters
 
     public Long getId() {
@@ -78,11 +79,11 @@ public class QuizTournament {
         this.endDate = endDate;
     }
 
-    public List<TriviaQuestion> getTriviaQuestions() {
+    public Set<TriviaQuestion> getTriviaQuestions() {
         return triviaQuestions;
     }
 
-    public void setTriviaQuestions(List<TriviaQuestion> triviaQuestions) {
+    public void setTriviaQuestions(Set<TriviaQuestion> triviaQuestions) {
         this.triviaQuestions = triviaQuestions;
     }
 

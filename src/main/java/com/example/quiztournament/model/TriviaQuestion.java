@@ -10,6 +10,8 @@ import java.util.List;
 public class TriviaQuestion {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String category;
     private String type;
     private String difficulty;
@@ -27,6 +29,14 @@ public class TriviaQuestion {
     @ManyToOne
     @JoinColumn(name = "q_id") // The foreign key column
     private QuizTournament quizTournament;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public QuizTournament getQuizTournament() {
         return quizTournament;
