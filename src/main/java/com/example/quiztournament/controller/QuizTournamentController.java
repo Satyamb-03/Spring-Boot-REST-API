@@ -35,19 +35,26 @@ public class QuizTournamentController {
     @GetMapping("/{id}")
     public ResponseEntity<QuizTournament> getTournamentById(@PathVariable Long id) {
         QuizTournament tournament = tournamentService.getTournamentById(id);
-        return ResponseEntity.ok(tournament);
+        if (tournament != null) {
+            return ResponseEntity.ok(tournament);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
-    // Fetch trivia questions for a specific tournament
+    // Fetch and save trivia questions for a specific tournament
+    // Fetch trivia questions based on tournament configuration
     @GetMapping("/{id}/questions")
-    public ResponseEntity<List<TriviaQuestion>> getTriviaQuestions(
-            @PathVariable Long id,
-            @RequestParam int numberOfQuestions,
-            @RequestParam String category,
-            @RequestParam String difficulty) {
+    public ResponseEntity<List<TriviaQuestion>> fetchQuestionsForTournament(@PathVariable Long id) {
         QuizTournament tournament = tournamentService.getTournamentById(id);
         if (tournament != null) {
-                List<TriviaQuestion> questions = tournamentService.fetchTriviaQuestions(numberOfQuestions, category, difficulty);
+            // Use the tournament's configuration to fetch questions
+            List<TriviaQuestion> questions = tournamentService.fetchAndSaveTriviaQuestions(
+                    tournament.getNumberOfQuestions(),
+                    tournament.getCategory(),
+                    tournament.getDifficulty(),
+                    tournament.getId()
+            );
             return ResponseEntity.ok(questions);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -58,7 +65,11 @@ public class QuizTournamentController {
     @PutMapping("/{id}")
     public ResponseEntity<QuizTournament> updateTournament(@PathVariable Long id, @RequestBody QuizTournament tournament) {
         QuizTournament updatedTournament = tournamentService.updateTournament(id, tournament);
-        return ResponseEntity.ok(updatedTournament);
+        if (updatedTournament != null) {
+            return ResponseEntity.ok(updatedTournament);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     // Delete a quiz tournament

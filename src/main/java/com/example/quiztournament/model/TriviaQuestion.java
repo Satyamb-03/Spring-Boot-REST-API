@@ -1,16 +1,42 @@
 package com.example.quiztournament.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class TriviaQuestion {
+
+    @Id
     private String category;
     private String type;
     private String difficulty;
     private String question;
-    private String correctAnswer;
-    private List<String> incorrectAnswers;
 
-    // Getters and setters
+    @JsonProperty("correct_answer")
+    private String correctAnswer;
+
+    @ElementCollection
+    @CollectionTable(name = "incorrect_answers", joinColumns = @JoinColumn(name = "question_id"))
+    @Column(name = "answer")
+    private List<String> incorrectAnswers = new ArrayList<>();
+
+
+    @ManyToOne
+    @JoinColumn(name = "q_id") // The foreign key column
+    private QuizTournament quizTournament;
+
+    public QuizTournament getQuizTournament() {
+        return quizTournament;
+    }
+
+    public void setQuizTournament(QuizTournament quizTournament) {
+        this.quizTournament = quizTournament;
+    }
+
+    // Getters and Setters
     public String getCategory() {
         return category;
     }
@@ -56,6 +82,6 @@ public class TriviaQuestion {
     }
 
     public void setIncorrectAnswers(List<String> incorrectAnswers) {
-        this.incorrectAnswers = incorrectAnswers;
+        this.incorrectAnswers = List.of(String.valueOf(incorrectAnswers));
     }
 }

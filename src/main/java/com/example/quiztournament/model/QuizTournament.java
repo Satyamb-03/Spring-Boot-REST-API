@@ -3,6 +3,7 @@ package com.example.quiztournament.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "quiz_tournaments")
@@ -25,6 +26,8 @@ public class QuizTournament {
     // Additional fields (e.g., number of questions, etc.)
     private int numberOfQuestions;
 
+    @OneToMany(mappedBy = "quizTournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TriviaQuestion> triviaQuestions;
     // Getters and Setters
 
     public Long getId() {
@@ -73,6 +76,14 @@ public class QuizTournament {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public List<TriviaQuestion> getTriviaQuestions() {
+        return triviaQuestions;
+    }
+
+    public void setTriviaQuestions(List<TriviaQuestion> triviaQuestions) {
+        this.triviaQuestions = triviaQuestions;
     }
 
     public int getNumberOfQuestions() {
