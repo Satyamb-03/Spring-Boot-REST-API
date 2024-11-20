@@ -57,7 +57,7 @@ public class TriviaQuestionService {
     // Update a trivia question
     public TriviaQuestion updateTriviaQuestion(Long id, TriviaQuestion triviaQuestionDetails) {
         TriviaQuestion triviaQuestion = triviaQuestionRepository.findById(id).orElseThrow(() -> new RuntimeException("Trivia question not found"));
-
+        triviaQuestion.setId(triviaQuestion.getId());
         triviaQuestion.setCategory(triviaQuestionDetails.getCategory());
         triviaQuestion.setDifficulty(triviaQuestionDetails.getDifficulty());
         triviaQuestion.setQuestion(triviaQuestionDetails.getQuestion());
