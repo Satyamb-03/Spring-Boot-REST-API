@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TriviaQuestionRepository extends JpaRepository<TriviaQuestion, Long> {
-    List<TriviaQuestion> findByQuizTournamentId(Long tournamentId);
+    List<TriviaQuestion> findByQuizTournamentId(Long quizTournamentId);
 }

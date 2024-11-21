@@ -43,18 +43,27 @@ public class QuizTournamentController {
     }
 
     // Fetch and save trivia questions for a specific tournament
-    // Fetch trivia questions based on tournament configuration
     @GetMapping("/{id}/questions")
     public ResponseEntity<List<TriviaQuestion>> fetchQuestionsForTournament(@PathVariable Long id) {
         QuizTournament tournament = tournamentService.getTournamentById(id);
         if (tournament != null) {
-            // Use the tournament's configuration to fetch questions
             List<TriviaQuestion> questions = tournamentService.fetchAndSaveTriviaQuestions(
                     tournament.getNumberOfQuestions(),
                     tournament.getCategory(),
                     tournament.getDifficulty(),
                     tournament.getId()
             );
+            return ResponseEntity.ok(questions);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    // Fetch all trivia questions for a specific tournament
+    @GetMapping("/{id}/questions/all")
+    public ResponseEntity<List<TriviaQuestion>> getAllQuestionsForTournament(@PathVariable Long id) {
+        List<TriviaQuestion> questions = tournamentService.getAllQuestionsByTournamentId(id);
+        if (!questions.isEmpty()) {
             return ResponseEntity.ok(questions);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
