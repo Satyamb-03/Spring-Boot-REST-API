@@ -27,7 +27,7 @@ public class TriviaQuestion {
 
 
     @ManyToOne
-    @JoinColumn(name = "q_id") // The foreign key column
+    @JoinColumn(name = "q_id",referencedColumnName = "id") // The foreign key column
     private QuizTournament quizTournament;
 
     public Long getId() {

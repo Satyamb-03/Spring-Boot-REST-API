@@ -27,7 +27,7 @@ public class QuizTournament {
     // Additional fields (e.g., number of questions, etc.)
     private int numberOfQuestions;
 
-    @OneToMany(mappedBy = "quizTournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quizTournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TriviaQuestion> triviaQuestions;
     // Getters and Setters
 
@@ -79,9 +79,9 @@ public class QuizTournament {
         this.endDate = endDate;
     }
 
-    public Set<TriviaQuestion> getTriviaQuestions() {
+    /*public Set<TriviaQuestion> getTriviaQuestions() {
         return triviaQuestions;
-    }
+    }*/
 
     public void setTriviaQuestions(Set<TriviaQuestion> triviaQuestions) {
         this.triviaQuestions = triviaQuestions;

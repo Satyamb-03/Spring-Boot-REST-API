@@ -19,20 +19,22 @@ public class TriviaQuestionService {
     @Autowired
     private QuizTournamentRepository quizTournamentRepository;
 
-    // Save a new trivia question with the related quiz tournament
     public TriviaQuestion saveTriviaQuestion(TriviaQuestion triviaQuestion, Long quizTournamentId) {
-        // Fetch the QuizTournament by its ID
-        Optional<QuizTournament> quizTournamentOptional = quizTournamentRepository.findById(quizTournamentId);
-
-        if (quizTournamentOptional.isPresent()) {
-            // Set the quiz tournament for the trivia question
-            TriviaQuestion savedQuestion = triviaQuestion;
-            savedQuestion.setQuizTournament(quizTournamentOptional.get());
-            return triviaQuestionRepository.save(savedQuestion); // Save and return the question
-        } else {
-            throw new RuntimeException("Quiz tournament not found");
+        if (quizTournamentId == null) {
+            throw new IllegalArgumentException("Quiz tournament ID cannot be null");
         }
+
+        // Fetch the QuizTournament by its ID
+        QuizTournament quizTournament = quizTournamentRepository.findById(quizTournamentId)
+                .orElseThrow(() -> new RuntimeException("Quiz tournament not found with ID: " + quizTournamentId));
+
+        // Set the relationship
+        triviaQuestion.setQuizTournament(quizTournament);
+
+        // Save the trivia question
+        return triviaQuestionRepository.save(triviaQuestion);
     }
+
 
     // Fetch all trivia questions
     public List<TriviaQuestion> getAllTriviaQuestions() {

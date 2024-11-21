@@ -72,15 +72,29 @@ public class QuizTournamentService {
 
     // Fetch trivia questions from the external API and save them to the database
     public List<TriviaQuestion> fetchAndSaveTriviaQuestions(int numberOfQuestions, String category, String difficulty, Long id) {
+        // Fetch the associated QuizTournament
+        QuizTournament quizTournament = tournamentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("QuizTournament not found with ID: " + id));
+
+        // Build the API URL
         String url = triviaApiUrl + "?amount=" + numberOfQuestions + "&category=" + category + "&difficulty=" + difficulty;
         RestTemplate restTemplate = new RestTemplate();
         TriviaApiResponse response = restTemplate.getForObject(url, TriviaApiResponse.class);
 
         if (response != null && response.getResults() != null) {
             List<TriviaQuestion> questions = response.getResults();
-            triviaQuestionRepository.saveAll(questions); // Save fetched questions to the database
+
+            // Set the QuizTournament for each TriviaQuestion
+            for (TriviaQuestion question : questions) {
+                question.setQuizTournament(quizTournament); // Associate with the QuizTournament
+            }
+
+            // Save the questions to the database
+            triviaQuestionRepository.saveAll(questions);
             return questions;
         }
-        return null;
+
+        return null; // Return null if no questions are fetched
     }
+
 }
